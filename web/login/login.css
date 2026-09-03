@@ -1,0 +1,178 @@
+:root {
+  --bg: #fbf8fa;
+  --line: rgba(72, 60, 78, 0.11);
+  --text: #2e2a33;
+  --text-2: #4a4453;
+  --muted: #8b8394;
+  --danger: #d2506a;
+  --shadow: 0 10px 34px rgba(96, 74, 102, 0.09);
+  --shadow-lg: 0 24px 60px rgba(96, 74, 102, 0.16);
+  --chishiya: #7fb3da;
+  --chishiya-deep: #3d7ea8;
+  --chishiya-wash: #edf4fa;
+  --creyzsa: #e893b4;
+  --creyzsa-deep: #c0507f;
+  --creyzsa-wash: #fdf1f6;
+  --accent-soft: #f0b7cd;
+  --accent-ink: #62233f;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --sans: "Outfit", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.orb {
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+}
+.orb-a { top: -16vw; left: -10vw; background: #f6c9dc; }
+.orb-b { right: -12vw; bottom: -18vw; background: #d9e6f6; }
+
+.gate {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.gate-card {
+  width: min(390px, 100%);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  box-shadow: var(--shadow-lg);
+  padding: 30px 26px 22px;
+  text-align: center;
+}
+.gate-card img { border-radius: 17px; box-shadow: 0 6px 18px rgba(96, 74, 102, 0.13); }
+
+.eyebrow {
+  margin: 14px 0 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.gate-card h1 {
+  margin: 0 0 22px;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.gate-who { display: grid; gap: 10px; }
+.gate-who button {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text-2);
+  border-radius: 16px;
+  padding: 15px 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.gate-who button .pip { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+.gate-who button[data-who="chishiya"] .pip { background: var(--chishiya); }
+.gate-who button[data-who="creyzsa"] .pip { background: var(--creyzsa); }
+.gate-who button[data-who="chishiya"]:hover {
+  background: var(--chishiya-wash);
+  border-color: var(--chishiya);
+  color: var(--chishiya-deep);
+}
+.gate-who button[data-who="creyzsa"]:hover {
+  background: var(--creyzsa-wash);
+  border-color: var(--creyzsa);
+  color: var(--creyzsa-deep);
+}
+.gate-who button:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+.gate-form { display: grid; gap: 10px; text-align: left; }
+.gate-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+#gate-pin {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  background: #f4eff3;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 13px 12px;
+  color: var(--text);
+}
+#gate-pin::placeholder { letter-spacing: normal; font-size: 13px; color: #b3acbb; }
+#gate-pin:focus { outline: 3px solid var(--creyzsa-wash); border-color: var(--creyzsa); }
+.gate-card[data-who="chishiya"] #gate-pin:focus {
+  outline-color: var(--chishiya-wash);
+  border-color: var(--chishiya);
+}
+
+.gate-msg { margin: 0; font-size: 12px; color: var(--muted); min-height: 1em; line-height: 1.45; }
+.gate-msg.bad { color: var(--danger); }
+
+.gate-actions { display: flex; gap: 8px; }
+.btn {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text-2);
+  border-radius: 999px;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+.btn:hover { border-color: rgba(72, 60, 78, 0.22); }
+.btn.primary {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  border-color: transparent;
+  font-weight: 600;
+}
+.gate-card[data-who="chishiya"] .btn.primary {
+  background: #a8cbe8;
+  color: #1b3f58;
+}
+.btn:disabled { opacity: 0.6; cursor: default; }
+
+/* kalimat penyemangat, bukan catatan teknis — dibuat sedikit lebih hidup */
+.gate-note {
+  margin: 24px 0 2px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(72, 60, 78, 0.08);
+  font-size: 12px;
+  font-style: italic;
+  color: #a89bb0;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}

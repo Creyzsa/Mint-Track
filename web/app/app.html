@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#060807" />
+  <title>Mint Tracker</title>
+  <meta name="description" content="Catat semua jadwal crypto — WL, presale, mint, airdrop, TGE — dari chain atau marketplace mana pun. Isi waktu tinggal klik, countdown jalan otomatis." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="/app/assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@360;420;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/app/css/styles.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <button class="audio-lock" id="audio-lock" type="button" hidden>
+    🔇 Bunyi pengingat belum aktif di perangkat ini — <strong>klik di sini</strong> supaya alarmnya bisa keluar.
+  </button>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="/app/assets/logo.svg" alt="" width="40" height="40" />
+        <div>
+          <p class="eyebrow">Girl power</p>
+          <h1>Mint Tracker</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="me" id="me"><span class="pip"></span><b id="me-name">—</b></span>
+        <button class="btn ghost" id="btn-compare" type="button" aria-pressed="false">Compare</button>
+        <button class="btn ghost tiny" id="btn-logout" type="button">Keluar</button>
+        <button class="btn ghost" id="btn-notify" type="button" title="Aktifkan pengingat browser">
+          <span class="dot" id="notify-dot"></span>
+          Pengingat
+        </button>
+        <button class="btn ghost" id="btn-sound" type="button" title="Bunyi pengingat — klik untuk tes / matikan">
+          <span class="dot" id="sound-dot"></span>
+          Bunyi
+        </button>
+        <button class="btn primary" id="btn-add" type="button">+ Jadwal baru</button>
+      </div>
+    </header>
+
+    <section class="hero" id="hero">
+      <div class="hero-copy">
+        <p class="kicker" id="hero-kicker">Jadwal berikutnya</p>
+        <h2><span class="badge" id="hero-badge" hidden></span><span id="hero-title">Belum ada jadwal</span></h2>
+        <p class="hero-meta" id="hero-meta">Tambah WL, presale, mint, atau airdrop supaya countdown-nya jalan.</p>
+        <div class="hero-links" id="hero-links"></div>
+      </div>
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="count-cell"><strong id="cd-d">00</strong><span>hari</span></div>
+        <div class="count-cell"><strong id="cd-h">00</strong><span>jam</span></div>
+        <div class="count-cell"><strong id="cd-m">00</strong><span>menit</span></div>
+        <div class="count-cell"><strong id="cd-s">00</strong><span>detik</span></div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Ringkasan">
+      <article class="stat">
+        <span>Akan datang</span>
+        <strong id="stat-upcoming">0</strong>
+      </article>
+      <article class="stat">
+        <span>Dalam 24 jam</span>
+        <strong id="stat-24h">0</strong>
+      </article>
+      <article class="stat">
+        <span>Menunggu kamu garap</span>
+        <strong id="stat-todo">0</strong>
+      </article>
+      <article class="stat">
+        <span>Sudah lewat</span>
+        <strong id="stat-past">0</strong>
+      </article>
+    </section>
+
+    <div class="toolbar">
+      <label class="search">
+        <span class="sr-only">Cari jadwal</span>
+        <input id="search" type="search" placeholder="Cari nama, chain, @akun, catatan…" autocomplete="off" />
+      </label>
+      <div class="filters">
+        <div class="chips" id="filter-types" role="group" aria-label="Filter tipe"></div>
+        <span class="chips-sep" aria-hidden="true"></span>
+        <button class="chip" type="button" id="filter-todo">Menunggu digarap</button>
+        <label class="sr-only" for="filter-status">Filter status</label>
+        <select id="filter-status" class="mini-select"></select>
+      </div>
+    </div>
+
+    <section class="panel" id="upcoming-panel">
+      <div class="panel-head">
+        <h2><span class="pulse"></span> Akan Datang</h2>
+        <span class="count-badge" id="upcoming-count">0</span>
+      </div>
+      <p class="board-notice" id="board-notice" hidden></p>
+      <div class="board" id="board"></div>
+      <div class="empty" id="upcoming-empty" hidden>
+        <p>Tidak ada yang menunggu. WL, presale, mint, airdrop, TGE — dari chain mana pun, tambahin di sini.</p>
+        <button class="btn primary" type="button" data-open-add>+ Jadwal baru</button>
+      </div>
+    </section>
+
+    <section class="panel muted" id="past-panel">
+      <div class="panel-head">
+        <h2>Sudah Lewat<em class="panel-tag" id="past-tag" hidden></em></h2>
+        <span class="count-badge" id="past-count">0</span>
+      </div>
+      <p class="past-hidden" id="past-hidden" hidden></p>
+      <div class="board" id="past-board"></div>
+    </section>
+
+    <footer class="foot">
+      <p>
+        Semua jam <strong>WIB</strong>. Tarik link X ke halaman ini — atau <kbd>Ctrl</kbd>+<kbd>V</kbd> — dan formnya langsung terisi.
+        <kbd>N</kbd> untuk form kosong. · <button class="linkish" id="btn-export" type="button">Export &amp; backup</button>
+      </p>
+      <div class="foot-actions">
+        <input id="import-file" type="file" accept="application/json" hidden />
+      </div>
+    </footer>
+  </div>
+
+  <dialog class="sheet wide" id="dialog">
+    <form id="mint-form" method="dialog">
+      <header>
+        <h3 id="dialog-title">Jadwal baru</h3>
+        <button class="icon-btn" type="button" id="btn-close" aria-label="Tutup">×</button>
+      </header>
+
+      <div class="form-grid">
+        <div class="full field grab">
+          <span class="field-label">Tarik / tempel dari X <em>— link atau caption, field di bawah keisi sendiri</em></span>
+          <div class="grab-row">
+            <input id="grab-input" type="text" placeholder="https://x.com/…/status/… — atau tempel caption-nya" autocomplete="off" spellcheck="false" />
+            <button class="btn primary tiny" type="button" id="grab-btn">Isi</button>
+          </div>
+          <label class="grab-toggle">
+            <input type="checkbox" id="grab-auto" />
+            <span>Ambil caption otomatis dari link <em>— kirim link ke api.fxtwitter.com / vxtwitter (pihak ketiga)</em></span>
+          </label>
+          <p class="grab-status" id="grab-status" aria-live="polite"></p>
+        </div>
+
+        <label>
+          Nama proyek
+          <input name="name" required maxlength="80" placeholder="PEPE2.0" autocomplete="off" />
+        </label>
+        <label>
+          Tipe
+          <select name="type"></select>
+        </label>
+        <label>
+          Chain
+          <input name="chain" maxlength="40" placeholder="ETH, SOL, Base…" list="chain-list" autocomplete="off" />
+        </label>
+        <label>
+          Platform / launchpad
+          <input name="platform" maxlength="40" placeholder="Magic Eden, Tensor, situs resmi…" list="platform-list" autocomplete="off" />
+        </label>
+        <label>
+          Sumber (X)
+          <input name="source" maxlength="40" placeholder="@pepe2_official" autocomplete="off" />
+        </label>
+        <label>
+          Diposting oleh
+          <select name="owner"></select>
+        </label>
+        <label>
+          Status
+          <select name="status"></select>
+        </label>
+        <label>
+          Harga
+          <input name="price" maxlength="30" placeholder="0.02 ETH / free" autocomplete="off" />
+        </label>
+        <label>
+          Supply
+          <input name="supply" maxlength="30" placeholder="5000" autocomplete="off" />
+        </label>
+
+        <div class="full field">
+          <span class="field-label">Tanggal &amp; jam <em>— klik saja, tidak perlu ngetik</em></span>
+          <div id="dt-picker"></div>
+        </div>
+
+        <label class="full">
+          Link
+          <input name="link" type="url" placeholder="https://…" autocomplete="off" />
+        </label>
+        <label class="full">
+          Catatan
+          <textarea name="notes" rows="2" placeholder="Max 2 per wallet, WL check di Discord"></textarea>
+        </label>
+        <label class="full" id="result-field">
+          Hasil / catatan akhir
+          <textarea name="result" rows="2" placeholder="Kena 2, floor 0.05 / kelewat, sold out cepat"></textarea>
+        </label>
+      </div>
+
+      <datalist id="chain-list">
+        <option value="ETH"></option>
+        <option value="SOL"></option>
+        <option value="Base"></option>
+        <option value="BTC / Ordinals"></option>
+        <option value="Abstract"></option>
+        <option value="Berachain"></option>
+        <option value="Monad"></option>
+        <option value="TON"></option>
+        <option value="Sui"></option>
+        <option value="Aptos"></option>
+        <option value="Arbitrum"></option>
+        <option value="Polygon"></option>
+        <option value="BNB Chain"></option>
+        <option value="Blast"></option>
+        <option value="ApeChain"></option>
+        <option value="Linea"></option>
+      </datalist>
+      <datalist id="platform-list">
+        <option value="Magic Eden"></option>
+        <option value="OpenSea"></option>
+        <option value="Blur"></option>
+        <option value="Tensor"></option>
+        <option value="Pump.fun"></option>
+        <option value="Launchpad resmi"></option>
+        <option value="Situs resmi"></option>
+        <option value="Discord"></option>
+        <option value="Premint"></option>
+        <option value="Alphabot"></option>
+        <option value="Galxe"></option>
+        <option value="Zealy"></option>
+      </datalist>
+
+      <footer>
+        <button class="btn ghost" type="button" id="btn-cancel">Batal</button>
+        <button class="btn primary" type="submit" id="btn-save">Simpan</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="sheet slim" id="export-dialog">
+    <header>
+      <h3>Export</h3>
+      <button class="icon-btn" type="button" id="export-close" aria-label="Tutup">×</button>
+    </header>
+    <p class="dialog-lead">JSON buat backup, Markdown buat Notion / Obsidian, .ics buat dimasukkan ke Google / Apple Calendar.</p>
+    <div class="export-row">
+      <button class="btn primary" type="button" id="export-json">JSON</button>
+      <button class="btn ghost" type="button" id="export-md">Markdown</button>
+      <button class="btn ghost" type="button" id="export-ics">Kalender (.ics)</button>
+    </div>
+    <p class="dialog-lead restore">Mengembalikan dari file backup — jadwal yang ada tidak ditimpa, cuma digabung.</p>
+    <div class="export-row">
+      <button class="btn ghost" type="button" id="export-import">Pulihkan dari JSON</button>
+    </div>
+  </dialog>
+
+  <dialog class="sheet slim" id="sound-dialog">
+    <header>
+      <h3>Pakai bunyi ini untuk?</h3>
+      <button class="icon-btn" type="button" id="sound-close" aria-label="Batal">×</button>
+    </header>
+    <p class="dialog-lead" id="sound-lead"></p>
+    <div class="export-row">
+      <button class="btn primary" type="button" id="sound-as-warn">Aba-aba 5 menit</button>
+      <button class="btn ghost" type="button" id="sound-as-ring">Dering saat mulai</button>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="/app/js/api.js"></script>
+  <script src="/app/js/time.js"></script>
+  <script src="/app/js/sound.js"></script>
+  <script src="/app/js/extract.js"></script>
+  <script src="/app/js/picker.js"></script>
+  <script src="/app/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "mint-tracker",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Mint Tracker — Girl power. Node + PostgreSQL, tanpa framework.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "schema": "psql \"%DATABASE_URL%\" -f server/schema.sql"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

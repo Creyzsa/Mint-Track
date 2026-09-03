@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fbf8fa" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Masuk — Mint Tracker</title>
+  <link rel="icon" href="/login/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/login/login.css" />
+</head>
+<body>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+
+  <main class="gate">
+    <div class="gate-card" id="gate-card">
+      <img src="/login/logo.svg" alt="" width="56" height="56" />
+      <p class="eyebrow">Unstoppable duo</p>
+      <h1>Mint Tracker</h1>
+
+      <div class="gate-who" id="gate-who">
+        <button type="button" data-who="chishiya"><span class="pip"></span>CHISHIYA</button>
+        <button type="button" data-who="creyzsa"><span class="pip"></span>CREYZSA</button>
+      </div>
+
+      <form class="gate-form" id="gate-form" hidden autocomplete="off">
+        <label class="gate-label" id="gate-label" for="gate-pin">PIN</label>
+        <input type="password" id="gate-pin" name="pin" maxlength="64" placeholder="••••"
+               autocomplete="current-password" enterkeyhint="go" />
+        <p class="gate-msg" id="gate-msg" aria-live="polite"></p>
+        <div class="gate-actions">
+          <button type="button" class="btn ghost" id="gate-back">Ganti akun</button>
+          <button type="submit" class="btn primary" id="gate-submit">Masuk</button>
+        </div>
+      </form>
+
+      <p class="gate-note">
+        We didn't come this far to only come this far.<br />
+        Two girls, one mission, endless energy.<br />
+        Watch us rise, together, always
+      </p>
+    </div>
+  </main>
+
+  <script src="/login/login.js"></script>
+</body>
+</html>
